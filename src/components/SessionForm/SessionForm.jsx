@@ -10,6 +10,15 @@ const SessionForm = ({ formData, setFormData, onSave, isEditing }) => {
     if (!formData.therapist.trim()) newErrors.therapist = "Therapist Name is required.";
     if (!formData.type) newErrors.type = "Session Type is required.";
     if (!formData.date) newErrors.date = "Date is required.";
+
+    // Prevent backdated sessions
+    if (formData.date) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Only compare date
+      const selectedDate = new Date(formData.date);
+      if (selectedDate < today) newErrors.date = "Date cannot be in the past.";
+    }
+
     if (formData.notes.length > 200) newErrors.notes = "Notes cannot exceed 200 characters.";
 
     if (Object.keys(newErrors).length > 0) {
@@ -17,13 +26,12 @@ const SessionForm = ({ formData, setFormData, onSave, isEditing }) => {
       return;
     }
 
-    // Call parent onSave with current formData
     onSave(formData);
-
-    // Reset form after saving
-    setFormData({ id: null, patient: "", therapist: "", type: "Counseling", date: "", notes: "" });
     setErrors({});
   };
+
+  // Optional: restrict date picker to prevent past dates
+  const todayStr = new Date().toISOString().split("T")[0];
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
@@ -71,6 +79,7 @@ const SessionForm = ({ formData, setFormData, onSave, isEditing }) => {
         <input
           type="date"
           value={formData.date}
+          min={todayStr} // Prevent backdating in picker
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           className="w-full border px-3 py-2 rounded"
         />
