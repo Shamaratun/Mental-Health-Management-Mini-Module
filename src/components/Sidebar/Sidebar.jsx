@@ -21,11 +21,11 @@ const Sidebar = () => {
                         Reports
                     </Link>
                 </li>
-                {/* <li>
-                    <Link to="/settings" className="block py-2 px-4 hover:bg-gray-700 rounded">
-                        Settings
+                <li>
+                    <Link to="/sessionList" className="block py-2 px-4 hover:bg-gray-700 rounded">
+                        Sessionlist
                     </Link>
-                    </li> */}
+                    </li>
                     <li>
                     <Link to="/home" className="block py-2 px-4 hover:bg-gray-700 rounded">
                         Home
